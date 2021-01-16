@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import io from 'socket.io-client';
 import Landing from './Landing';
-
-const port = '/';
-const socket = io(port);
-
+import socket from './../apis';
+import Lobby from './Lobby';
 class Main extends Component {
     constructor(props) {
         super(props) 
@@ -13,9 +11,22 @@ class Main extends Component {
             landing: true,
             lobby: false,
             xPlayer_name: '',
+            lobbyWaiting: true,
             oPlayer_name: '',
-            lobbyCode: '',
-            isPlayerX: false
+            code: '',
+            isPlayerX: false,
+            gameState: {            
+                p1_name: "",
+                p2_name: "",
+                p1_score: 0,
+                p2_score: 0,
+                ties: 0,
+                p1_turn: true,
+                grid: [0,0,0,
+                    0,0,0,
+                    0,0,0]
+        
+            }
         }
     }
 
@@ -25,20 +36,33 @@ class Main extends Component {
                 landing: false,
                 lobby: true,
                 xPlayer_name: name,
-                lobbyCode: code,
+                code: code,
                 isPlayerX: true
             })
         })
+
+        socket.on("valid-code",(gameState)=>{
+            this.setState({
+                lobby_waiting: false,
+                landing:false,
+                lobby:true,
+            
+                gameState: gameState
+            })
+
+        })
     }
+    
+    
+    
 
     render() {
+        const gamestate = this.state.gameState;
         return(
             <div>
-                <Landing />
-                {
-                   // this.state.landing ?
-                   // <Landing /> : <Lobby /> to do..
-                }
+                {this.state.landing && <Landing/>}
+         
+         {this.state.lobby && <Lobby gamestate={gamestate} waiting={this.state.lobbyWaiting} code={this.state.code} isPlayerX={this.state.isPlayerX} /> }
             </div>
         )
     }

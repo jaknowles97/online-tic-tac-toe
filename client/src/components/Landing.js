@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import CreateSession from './CreateSession';
 
 const Landing = props => {
 
     const [create_modal, toggleModal] = useState(false);
-    // const [join_modal, toggleJoin] = useState(false);
+    const [join_modal, settoggleJoin] = useState(false);
     const toggleCreate  = () => toggleModal( !create_modal);
+    const toggleJoin  = () => settoggleJoin( !join_modal);
 
     return (
         <div>
@@ -15,18 +17,18 @@ const Landing = props => {
             <Modal isOpen={create_modal} toggle={toggleCreate}>
                 <ModalHeader toggle={toggleCreate}></ModalHeader>
                 <ModalBody>
-                    create session.
+                    <CreateSession />
                 </ModalBody>
             </Modal>
 
-{/* 
-            <Button className="session-btn" color="primary" size="md" onClick={join_toggle}>Join Session</Button>
-            <Modal isOpen={modal_join} toggle={join_toggle}>
-                <ModalHeader toggle={join_toggle}></ModalHeader>
-                <ModalBody>
 
+            <Button className="session-btn" color="primary" size="md" onClick={toggleJoin}>Join Session</Button>
+            <Modal isOpen={join_modal} toggle={toggleJoin}>
+                <ModalHeader toggle={toggleJoin}></ModalHeader>
+                <ModalBody>
+                    join session component goes here.
                 </ModalBody>
-            </Modal> */}
+            </Modal>
 
         </div>
     )
