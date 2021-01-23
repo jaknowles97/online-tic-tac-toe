@@ -11,9 +11,10 @@ export default class Lobby extends Component {
     constructor(props){
       super(props);
       this.state = {
-        isPlayerX:this.props.isPlayerX,
+        isPlayer_one:this.props.isPlayer_one,
         code: this.props.code,
         gamestate: this.props.gamestate
+        
       }
     }
 
@@ -34,7 +35,7 @@ export default class Lobby extends Component {
       return(
         <div>
           {this.props.waiting && <Waiting code={this.state.code}/>}
-          {!this.props.waiting && <Game gamestate={gamestate} isPlayerX={this.props.isPlayerX}/>}
+          {!this.props.waiting && <Game gamestate={gamestate} isPlayer_one={this.props.isPlayer_one}/>}
         </div>
       )
     }
@@ -70,7 +71,7 @@ class Game extends Component{
     socket.on("announcement", (text)=>{
       switch (text){
         case "player_one":
-          if(this.props.isPlayerX){
+          if(this.props.isPlayer_one){
             this.setState({
               announcement:true,
               message: "You Won!"
@@ -85,7 +86,7 @@ class Game extends Component{
           }
           break;
         case "player_two":
-          if(this.props.isPlayerX){
+          if(this.props.isPlayer_one){
             this.setState({
               announcement:true,
               message: "You Lost"
@@ -129,12 +130,12 @@ class Game extends Component{
       {!this.state.OpponentDisconnected && 
       <div className="game">
         <div className="board-container">
-          <Board gamestate={gamestate} isPlayerX={this.props.isPlayerX}/>
+          <Board gamestate={gamestate} isPlayer_one={this.props.isPlayer_one}/>
           
         </div>
         <div className="stats-container">
           {this.state.announcement && <Announcement>{this.state.message}</Announcement>}
-          {!this.state.announcement && <Stats gamestate={gamestate} isPlayerX={this.props.isPlayerX}/>}
+          {!this.state.announcement && <Stats gamestate={gamestate} isPlayer_one={this.props.isPlayer_one}/>}
         </div>
       </div>
       }

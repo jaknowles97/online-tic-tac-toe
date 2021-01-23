@@ -1,20 +1,27 @@
-import React, { Component } from 'react';
-import io from 'socket.io-client';
-import Landing from './Landing';
-import socket from './../apis';
+
+import React, { Component } from 'react'
+import Landing from "./Landing";
+import CreateSessionPage from './CreateSession';
+import JoinSession from './JoinSession';
 import Lobby from './Lobby';
-class Main extends Component {
+import socket from './../apis/';
+import io from 'socket.io-client';
+
+
+
+export default class Main extends Component {
     constructor(props) {
-        super(props) 
+        super(props)
 
         this.state = {
-            landing: true,
-            lobby: false,
-            xPlayer_name: '',
-            lobbyWaiting: true,
-            oPlayer_name: '',
-            code: '',
-            isPlayerX: false,
+            landing:true,
+            lobby:false,
+
+            pl_one_name:"",
+            lobby_waiting:true,
+            code:"",
+            isPlayer_one:false,
+
             gameState: {            
                 p1_name: "",
                 p2_name: "",
@@ -27,45 +34,53 @@ class Main extends Component {
                     0,0,0]
         
             }
+
         }
     }
 
-    componentDidMount() {
-        socket.on('session-created', (name, code) => {
-            this.setState({
-                landing: false,
-                lobby: true,
-                xPlayer_name: name,
-                code: code,
-                isPlayerX: true
-            })
-        })
+    componentDidMount=()=>{
+        socket.on("session-created",(name,code)=>{this.setState({
+            landing:false,
+            lobby:true,
+            
+
+            pl_one_name: name,
+            code:code,
+            isPlayer_one:true //if you created the session, you are player one. 
+
+        })})
 
         socket.on("valid-code",(gameState)=>{
+            
+            
+            
             this.setState({
                 lobby_waiting: false,
                 landing:false,
                 lobby:true,
             
                 gameState: gameState
-            })
 
+           })
+           
+            
+           
         })
     }
     
     
-    
-
-    render() {
+    render=()=>{
+        
         const gamestate = this.state.gameState;
-        return(
+
+        return (
             <div>
                 {this.state.landing && <Landing/>}
          
-         {this.state.lobby && <Lobby gamestate={gamestate} waiting={this.state.lobbyWaiting} code={this.state.code} isPlayerX={this.state.isPlayerX} /> }
+                {this.state.lobby && <Lobby gamestate={gamestate} waiting={this.state.lobby_waiting} code={this.state.code} isPlayer_one={this.state.isPlayer_one} /> }
+                
             </div>
         )
     }
 }
 
-export default Main;

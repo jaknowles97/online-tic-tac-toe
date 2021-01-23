@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import CreateSession from './CreateSession';
+import JoinSession from './JoinSession';
 
 const Landing = props => {
 
@@ -26,7 +27,7 @@ const Landing = props => {
             <Modal isOpen={join_modal} toggle={toggleJoin}>
                 <ModalHeader toggle={toggleJoin}></ModalHeader>
                 <ModalBody>
-                    join session component goes here.
+                    <JoinSession />
                 </ModalBody>
             </Modal>
 

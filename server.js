@@ -33,6 +33,7 @@ const lobbyEvents = socket => {
 
         socket.emit('session-created', name, code);
         socket.on("disconnect", ()=> {
+            console.log(SocketToSession)
             try{
               SocketToSession[socket].player_two_socket.emit("user-disconnected");
             }
