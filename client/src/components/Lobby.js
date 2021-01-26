@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react'
+import React, { Component, useEffect, useState } from 'react'
 import {Button, Spinner} from 'reactstrap';
 import Board from './Board';
 import Stats from './Stats';
@@ -6,53 +6,52 @@ import Announcement from './Announcement';
 import socket from './../apis';
 
 
-export default class Lobby extends Component {
+const Lobby = props => {
+  const [isPlayer_one, setIsPlayer_one] = useState(props.isPlayer_one);
+  const [code, setCode] = useState(props.code);
+  const [gamestate, setGamestate] = useState(props.gamestate);
     
-    constructor(props){
-      super(props);
-      this.state = {
-        isPlayer_one:this.props.isPlayer_one,
-        code: this.props.code,
-        gamestate: this.props.gamestate
+    // constructor(props){
+    //   super(props);
+    //   this.state = {
+    //     isPlayer_one:this.props.isPlayer_one,
+    //     code: this.props.code,
+    //     gamestate: this.props.gamestate
         
-      }
-    }
+    //   }
+    // }
 
 
 
-    componentDidMount=()=>{
+    useEffect(()=>{
       socket.on("update",(gamestate)=> {
-        this.setState({gamestate: gamestate})
+        setGamestate(gamestate)
         
       })
-    }
-
-
-    
-    render=()=>{
-      const gamestate = this.state.gamestate;
+    }, [gamestate] );
       
       return(
         <div>
-          {this.props.waiting && <Waiting code={this.state.code}/>}
-          {!this.props.waiting && <Game gamestate={gamestate} isPlayer_one={this.props.isPlayer_one}/>}
+          {props.waiting && <Waiting code={props.code}/>}
+          {!props.waiting && <Game gamestate={gamestate} isPlayer_one={props.isPlayer_one}/>}
         </div>
       )
-    }
+    
 }
+export default Lobby;
 
-class Waiting extends Component{
-  render(){
+const Waiting = props => {
+  
     return (
         <div className="waiting-lobby" >
             <h5>Waiting for someone to join</h5>
             <Spinner color="dark"></Spinner>
             <h6>Click to Copy Session Code:</h6>
-            <Button onClick={()=> {navigator.clipboard.writeText(this.props.code)}}>{this.props.code}</Button>
+            <Button onClick={()=> {navigator.clipboard.writeText(props.code)}}>{props.code}</Button>
             
         </div>
     )
-  }
+  
 }
 
 

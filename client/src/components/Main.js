@@ -1,86 +1,84 @@
-
-import React, { Component } from 'react'
+import React, { useState, useEffect } from "react";
 import Landing from "./Landing";
-import CreateSessionPage from './CreateSession';
-import JoinSession from './JoinSession';
-import Lobby from './Lobby';
-import socket from './../apis/';
-import io from 'socket.io-client';
+import CreateSessionPage from "./CreateSession";
+import JoinSession from "./JoinSession";
+import Lobby from "./Lobby";
+import socket from "./../apis/";
+import io from "socket.io-client";
 
+const Main = (props) => {
+  const [landing, setLanding] = useState(true);
+  const [lobby, setLobby] = useState(false);
+  const [pl_one_name, setPl_one_name] = useState("");
+  const [lobby_waiting, setLobby_waiting] = useState(true);
+  const [code, setCode] = useState("");
+  const [isPlayer_one, setIsPlayer_one] = useState(false);
+  const [gameState, setGameState] = useState({
+    p1_name: "",
+    p1_score: 0,
+    p2_name: "",
+    p2_score: 0,
+    ties: 0,
+    p1_turn: true,
+    grid: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  });
+  // this.state = {
+  //     landing:true,
+  //     lobby:false,
 
+  //     pl_one_name:"",
+  //     lobby_waiting:true,
+  //     code:"",
+  //     isPlayer_one:false,
 
-export default class Main extends Component {
-    constructor(props) {
-        super(props)
+  //     gameState: {
+  //         p1_name: "",
+  //         p2_name: "",
+  //         p1_score: 0,
+  //         p2_score: 0,
+  //         ties: 0,
+  //         p1_turn: true,
+  //         grid: [0,0,0,
+  //             0,0,0,
+  //             0,0,0]
 
-        this.state = {
-            landing:true,
-            lobby:false,
+  //     }
 
-            pl_one_name:"",
-            lobby_waiting:true,
-            code:"",
-            isPlayer_one:false,
+  // }
 
-            gameState: {            
-                p1_name: "",
-                p2_name: "",
-                p1_score: 0,
-                p2_score: 0,
-                ties: 0,
-                p1_turn: true,
-                grid: [0,0,0,
-                    0,0,0,
-                    0,0,0]
-        
-            }
+  useEffect(() => {
+    socket.on("session-created", (name, code) => {
+      setLanding(!landing);
+      setLobby(!lobby);
+      setPl_one_name(name);
+      setCode(code);
+      setIsPlayer_one(!isPlayer_one);
+    });
 
-        }
-    }
+    socket.on("valid-code", (gamestate) => {
+      setLobby_waiting(!lobby_waiting);
+      setLanding(!landing);
+      setLobby(!lobby);
+      setGameState( gamestate);
+    });
+  }, []);
 
-    componentDidMount=()=>{
-        socket.on("session-created",(name,code)=>{this.setState({
-            landing:false,
-            lobby:true,
-            
+  // const gamestate = this.state.gameState;
 
-            pl_one_name: name,
-            code:code,
-            isPlayer_one:true //if you created the session, you are player one. 
+  return (
+    <div>
+      {landing && <Landing />}
 
-        })})
+      {lobby && (
+        <Lobby
+          gamestate={gameState}
+          waiting={lobby_waiting}
+          code={code}
+          isPlayer_one={isPlayer_one}
+        />
+      )}
+    </div>
+  );
+};
 
-        socket.on("valid-code",(gameState)=>{
-            
-            
-            
-            this.setState({
-                lobby_waiting: false,
-                landing:false,
-                lobby:true,
-            
-                gameState: gameState
-
-           })
-           
-            
-           
-        })
-    }
-    
-    
-    render=()=>{
-        
-        const gamestate = this.state.gameState;
-
-        return (
-            <div>
-                {this.state.landing && <Landing/>}
-         
-                {this.state.lobby && <Lobby gamestate={gamestate} waiting={this.state.lobby_waiting} code={this.state.code} isPlayer_one={this.state.isPlayer_one} /> }
-                
-            </div>
-        )
-    }
-}
-
+export default Main;
