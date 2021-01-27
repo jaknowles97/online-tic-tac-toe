@@ -1,57 +1,73 @@
-import React, { Component } from 'react';
-import {InputGroup,InputGroupAddon,Input,InputGroupText, Button} from 'reactstrap';
+import React, { useEffect, useState } from "react";
+import DialogActions from "@material-ui/core/DialogActions";
+import TextField from "@material-ui/core/TextField";
+import Button from "@material-ui/core/Button";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
 
-import socket from './../apis/';
-import io from 'socket.io-client';
+import socket from "./../apis/";
+import io from "socket.io-client";
 
-export default class JoinSession extends Component {
-    state = {
-        "code": "",
-        "name": "",
-        invalid: false
-    }
-    updateForm = (event) => {
-        
-        this.setState({
-            [event.target.name]: event.target.value
-        })
-        
-    }
+const JoinSession = () => {
+  const [code, setCode] = useState("");
+  const [name, setName] = useState("");
+  const [invalid, setInvalid] = useState(false);
 
-    submitForm = () => {
-        if(this.state["code"] !== "" && this.state["name"] !== "" ){
-            socket.emit("join-session",this.state.code,this.state.name);
-        }
-        // TODO: else give a prompt
+  const submitForm = () => {
+    if (code !== "" && name !== "") {
+      socket.emit("join-session", code, name);
     }
+    // TODO: else give a prompt
+  };
 
-    componentDidMount(){
-        socket.on("invalid-code",()=>{
-            this.setState({invalid:true});
-        })
-        
-    }
+  useEffect(() => {
+    socket.on("invalid-code", () => {
+      setInvalid(!invalid);
+    });
+  });
 
-    render() {
-        return (
-            
-            <div className="session-page" >
-                
-                <InputGroup style={{width:"95%", margin:"0 auto"}}>
-                    <Input onChange={this.updateForm} name="name" placeholder="username"/>
-                </InputGroup>
-                <InputGroup style={{width:"95%", margin:"0 auto"}}>
-                    <Input onChange={this.updateForm} name="code" placeholder="session code"/>
-                </InputGroup>
-                <Button onClick={this.submitForm} className="session-btn" color="primary">Join Session</Button>
-                
-                {this.state.invalid &&
-                <div>
-                     <p style={{color:"red"}}>Invalid Session Code</p>
-                </div>}
-                
-            </div>
-            
-        )
-    }
-}
+  return (
+    <div className="session-page">
+      <DialogContent>
+        <DialogContentText>
+          to join a lobby please enter a user name and session code.
+        </DialogContentText>
+        <TextField
+          autoFocus
+          margin="dense"
+          id="pl_two_name"
+          label="username"
+          type="username"
+          fullWidth
+          onChange={(e) => setName(e.target.value)}
+        />
+        <TextField
+          autoFocus
+          margin="dense"
+          id="session-code"
+          label="session code"
+          type="text"
+          fullWidth
+          onChange={(e) => setCode(e.target.value)}
+        />
+      </DialogContent>
+      <DialogActions>
+        <Button
+          className="session-btn"
+          color="primary"
+          onClick={() => submitForm()}
+        >
+          Create & Join
+        </Button>
+      </DialogActions>
+
+      {invalid && (
+        <div>
+          <p style={{ color: "red" }}>Invalid Session Code</p>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default JoinSession;

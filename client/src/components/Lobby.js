@@ -126,7 +126,7 @@ class Game extends Component{
             <h6>Opponent Disconnected :( </h6>
           </div>
       }
-      {!this.state.OpponentDisconnected && 
+      {!this.state.OpponentDisconnected &&
       <div className="game">
         <div className="board-container">
           <Board gamestate={gamestate} isPlayer_one={this.props.isPlayer_one}/>

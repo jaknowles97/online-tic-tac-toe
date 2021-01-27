@@ -48,11 +48,13 @@ const Main = (props) => {
 
   useEffect(() => {
     socket.on("session-created", (name, code) => {
+      console.log(name)
       setLanding(!landing);
       setLobby(!lobby);
       setPl_one_name(name);
       setCode(code);
       setIsPlayer_one(!isPlayer_one);
+    
     });
 
     socket.on("valid-code", (gamestate) => {

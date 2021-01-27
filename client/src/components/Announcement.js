@@ -1,17 +1,11 @@
+import React from "react";
 
-import React, { Component } from 'react'
+const Announcement = (props) => {
+  return (
+    <div>
+      <h3>{props.children}</h3>
+    </div>
+  );
+};
 
-
-export default class Announcement extends Component {
-
-
-    render() {
-        return (
-
-            <div>
-                <h3>{this.props.children}</h3>
-            </div>
-
-        )
-    }
-}
+export default Announcement;
