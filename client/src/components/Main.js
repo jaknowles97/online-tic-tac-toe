@@ -5,8 +5,12 @@ import JoinSession from "./JoinSession";
 import Lobby from "./Lobby";
 import socket from "./../apis/";
 import io from "socket.io-client";
+import { useGameStore } from "../GameProvider";
+import { useObserver } from "mobx-react";
 
 const Main = (props) => {
+const gameStore = useGameStore();
+
   const [landing, setLanding] = useState(true);
   const [lobby, setLobby] = useState(false);
   const [pl_one_name, setPl_one_name] = useState("");
@@ -67,7 +71,7 @@ const Main = (props) => {
 
   // const gamestate = this.state.gameState;
 
-  return (
+  return  useObserver( () => (
     <div>
       {landing && <Landing />}
 
@@ -80,7 +84,7 @@ const Main = (props) => {
         />
       )}
     </div>
-  );
+  ));
 };
 
 export default Main;
