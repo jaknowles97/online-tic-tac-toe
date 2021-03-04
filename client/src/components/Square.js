@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Button} from 'reactstrap';
+import  Button  from '@material-ui/core/Button';
 import socket from './../apis/';
 
  export default class Square extends Component{
