@@ -1,6 +1,8 @@
 
 import React, { Component} from 'react'
-import { Spinner,Table } from 'reactstrap';
+import Table from '@material-ui/core/Table';
+import CircularProgress from '@material-ui/core/CircularProgress';
+
 
 
 export default class Stats extends Component {
@@ -31,7 +33,7 @@ export default class Stats extends Component {
                         <h5>{opponent_name}'s Turn</h5>
                         
                         <div style={{display:"flex",alignItems:"center",justifyContent:"center"}}>
-                            <Spinner color="dark" ></Spinner>
+                            <CircularProgress color="dark" ></CircularProgress>
                         </div>
                     </div>}
 
