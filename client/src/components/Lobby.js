@@ -1,5 +1,6 @@
 import React, { Component, useEffect, useState } from 'react'
-import {Button, Spinner} from 'reactstrap';
+import  Button  from '@material-ui/core/Button';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Board from './Board';
 import Stats from './Stats';
 import Announcement from './Announcement';
