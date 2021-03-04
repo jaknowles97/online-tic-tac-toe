@@ -46,7 +46,7 @@ const Waiting = props => {
     return (
         <div className="waiting-lobby" >
             <h5>Waiting for someone to join</h5>
-            <Spinner color="dark"></Spinner>
+            <CircularProgress color="dark"></CircularProgress>
             <h6>Click to Copy Session Code:</h6>
             <Button onClick={()=> {navigator.clipboard.writeText(props.code)}}>{props.code}</Button>
             
