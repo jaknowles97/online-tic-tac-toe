@@ -12,7 +12,7 @@ const io = socketio(server, {
         methods: ['GET', 'POST']
     }
 });
-const PORT = 7789 || process.env.PORT;
+const PORT =  process.env.PORT || 7789;
 
 
 
